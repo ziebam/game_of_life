@@ -9,6 +9,6 @@ setup(
     description="Conway's Game of Life in the command-line",
     url="https://github.com/ziebam/game_of_life",
     packages=find_packages(),
-    install_requires=["colorama"],
+    install_requires=["pygame"],
     python_requires=">=3.5",
 )
