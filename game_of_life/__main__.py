@@ -69,8 +69,6 @@ def main() -> None:
     else:
         screen, state, grid_width, grid_height, cell_size = setup()
 
-    print(type(screen))
-
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -81,7 +79,7 @@ def main() -> None:
 
         state = get_next_state(state)
 
-        pygame.time.wait(50)
+        pygame.time.wait(100)
 
 
 if __name__ == "__main__":
