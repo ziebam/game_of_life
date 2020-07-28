@@ -3,26 +3,25 @@
 This module provides utility functions that don't fit any other module.
 """
 
+from typing import List
 
-import os
 
+def load_board_state(path_to_file: str) -> List[List[int]]:
+    """Loads the initial board state from file.
 
-def clear_screen() -> None:
-    """Clears the terminal screen.
+    Args:
+        path_to_file: A path to the file, preferably constructed with
+          os.path.join().
 
     Returns:
-        None
+        A list of lists representing the board in a 2D space.
     """
 
-    os.system("cls" if os.name == "nt" else "clear")
-
-
-def load_board_state(file):
-    with open(file) as data:
-        data = data.read().splitlines()
+    with open(path_to_file) as raw_data:
+        read_data = raw_data.read().splitlines()
 
         state = []
-        for row in data:
+        for row in read_data:
             state.append([int(cell) for cell in row])
 
         return state

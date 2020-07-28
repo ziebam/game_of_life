@@ -2,40 +2,86 @@
 """
 
 import sys
-import time
+import os
 
-from colorama import init
+import pygame
 
 from .state import get_next_state, random_state, render
-from .utilities import clear_screen
+from .utilities import load_board_state
+
+
+def setup(arguments: list = None) -> tuple:
+    """Sets up the GUI.
+
+    Args:
+        arguments: A list of appropriate arguments. Valid forms:
+          ["random", width, height]
+          ["file", path_to_file]
+          Defaults to None when no arguments are provided. Then we
+          set the arguments manually.
+    Returns:
+        Tuple containing pygame surface, initial board state,
+        grid width, grid height and block size.
+    """
+
+    pygame.display.set_caption("Conway's Game of Life")
+
+    cell_size = 25
+
+    if not arguments:
+        arguments = ["random", 25, 25]
+
+    if arguments[0] == "random":
+        grid_width = int(arguments[1])
+        grid_height = int(arguments[2])
+
+        state = random_state(grid_width, grid_height)
+
+        screen = pygame.display.set_mode(
+            (grid_width * cell_size, grid_height * cell_size)
+        )
+    elif arguments[0] == "file":
+        state = load_board_state(os.path.join("patterns", arguments[1]))
+
+        grid_width = len(state[0])
+        grid_height = len(state)
+
+        screen = pygame.display.set_mode(
+            (grid_width * cell_size, grid_height * cell_size)
+        )
+
+    return (screen, state, grid_width, grid_height, cell_size)
 
 
 def main() -> None:
-    """Handles the terminal setup and the game loop.
+    """Handles the game loop.
 
     Returns:
         None
     """
 
-    # When testing the script in Cygwin, printing in color didn't work after
-    # running Colorama's `init()`.
-    #
-    # After a bit of research, it turns out that this is the case when
-    # `sys.stdin.isatty()` returns False, i.e. when the shell is emulated.
-    #
-    # The following check ensures that the initialization only happens if
-    # the script is run from a not emulated terminal, e.g. cmd or bash.
-    if sys.stdin.isatty():
-        init()
+    pygame.init()
 
-    state = random_state(50, 50)
+    if len(sys.argv) > 1:
+        screen, state, grid_width, grid_height, cell_size = setup(
+            arguments=sys.argv[1:]
+        )
+    else:
+        screen, state, grid_width, grid_height, cell_size = setup()
+
+    print(type(screen))
+
     while True:
-        clear_screen()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
 
-        render(state)
+        render(screen, state, grid_width, grid_height, cell_size)
+
         state = get_next_state(state)
 
-        time.sleep(1)
+        pygame.time.wait(50)
 
 
 if __name__ == "__main__":
