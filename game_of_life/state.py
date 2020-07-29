@@ -11,8 +11,6 @@ from typing import List
 
 import pygame
 
-from .state_utilities import get_alive_neighbors
-
 
 class Color(Enum):
     """Enum for organizing pygame colors.
@@ -36,7 +34,13 @@ def random_state(width: int, height: int) -> List[List[int]]:
 
 
 # fmt: off
-def render(screen: pygame.Surface, state: List[List[int]], board_width: int, board_height: int, cell_size: int) -> None:
+def render(
+        screen: pygame.Surface,
+        state: List[List[int]],
+        board_width: int,
+        board_height: int,
+        cell_size: int,
+    ) -> None:
 # fmt: on
     """Displays the board in a pygame window on a 2D grid.
 
@@ -62,6 +66,41 @@ def render(screen: pygame.Surface, state: List[List[int]], board_width: int, boa
             else:
                 pygame.draw.rect(screen, Color.BLACK.value, rect, 1)
         pygame.display.update()
+
+
+def get_alive_neighbors(y_pos: int, x_pos: int, state: List[List[int]]) -> int:
+    """Counts alive neighbors of a cell with the passed coordinates.
+
+    Args:
+        y_pos: y position of the cell.
+        x_pos: x position of the cell.
+        state: A list of lists representing the board in a 2D space.
+
+    Returns:
+        The count of alive neighbors for a cell in state[y_pos][x_pos].
+    """
+
+    width = len(state[0])
+    height = len(state)
+
+    alive_neighbors = 0
+    for neighbor_y_pos in range(y_pos - 1, y_pos + 2):
+        # Make sure not to go off the grid vertically.
+        if neighbor_y_pos < 0 or neighbor_y_pos >= height:
+            continue
+
+        for neighbor_x_pos in range(x_pos - 1, x_pos + 2):
+            # Make sure not to compare to self.
+            if neighbor_y_pos == y_pos and neighbor_x_pos == x_pos:
+                continue
+
+            # Make sure not go off the grid horizontally.
+            if neighbor_x_pos < 0 or neighbor_x_pos >= width:
+                continue
+
+            alive_neighbors += state[neighbor_y_pos][neighbor_x_pos]
+
+    return alive_neighbors
 
 
 def get_next_state(current_state: List[List[int]]) -> List[List[int]]:
