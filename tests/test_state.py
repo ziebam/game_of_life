@@ -1,5 +1,4 @@
-"""Tests for the game_of_life/state.py module.
-"""
+"""Tests for the game_of_life/state.py module."""
 
 import json
 import os
@@ -11,8 +10,7 @@ with open(os.path.join("tests", "data", "test_state_data.json")) as json_data:
 
 
 def test_dead_cell_with_no_live_neighbors():
-    """Tests the board with only dead cells on it.
-    """
+    """Tests the board with only dead cells on it."""
 
     # fmt: off
     init_state = data["test_dead_cell_with_no_live_neighbors"]["init_state"]
@@ -25,8 +23,7 @@ def test_dead_cell_with_no_live_neighbors():
 
 
 def test_live_cell_with_zero_live_neighbors():
-    """Tests the board with a live cell without any neighbors on it.
-    """
+    """Tests the board with a live cell without any neighbors on it."""
 
     # fmt: off
     init_state = data["test_live_cell_with_zero_live_neighbors"]["init_state"]
@@ -39,8 +36,7 @@ def test_live_cell_with_zero_live_neighbors():
 
 
 def test_live_cell_with_one_live_neighbor():
-    """Tests the board with a live cell with one live neighbor on it.
-    """
+    """Tests the board with a live cell with one live neighbor on it."""
 
     # fmt: off
     init_state = data["test_live_cell_with_one_live_neighbor"]["init_state"]

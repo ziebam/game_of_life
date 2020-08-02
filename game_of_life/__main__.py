@@ -1,5 +1,4 @@
-"""The starting point for Conway's Game of Life simulation.
-"""
+"""The starting point for Conway's Game of Life simulation."""
 
 import sys
 import os
